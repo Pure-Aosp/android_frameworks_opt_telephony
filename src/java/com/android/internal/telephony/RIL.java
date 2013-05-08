@@ -24,6 +24,7 @@ import static android.telephony.TelephonyManager.NETWORK_TYPE_UMTS;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSDPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPA;
+import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPAP;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -2635,6 +2636,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_UNSOL_DATA_CALL_LIST_CHANGED:
                 if (RILJ_LOGD) unsljLogRet(response, ret);
 
+                boolean oldRil = needsOldRilFeature("skipbrokendatacall");
+                if (oldRil && "IP".equals(((ArrayList<DataCallState>)ret).get(0).type))
+                    break;
+
                 mDataNetworkStateRegistrants.notifyRegistrants(new AsyncResult(null, ret, null));
             break;
 
@@ -3020,6 +3025,15 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return new IccIoResult(sw1, sw2, s);
     }
 
+    public boolean needsOldRilFeature(String feature) {
+        String[] features = SystemProperties.get("ro.telephony.ril.v3", "").split(",");
+        for (String found: features) {
+            if (found.equals(feature))
+                return true;
+        }
+        return false;
+    }
+
     private Object
     responseIccCardStatus(Parcel p) {
         IccCardApplicationStatus appStatus;
@@ -3292,6 +3306,8 @@ public final class RIL extends BaseCommands implements CommandsInterface {
            radioType = NETWORK_TYPE_HSUPA;
        } else if (radioString.equals("HSPA")) {
            radioType = NETWORK_TYPE_HSPA;
+       } else if (radioString.equals("HSPAP")) {
+           radioType = NETWORK_TYPE_HSPAP;
        } else {
            radioType = NETWORK_TYPE_UNKNOWN;
        }
