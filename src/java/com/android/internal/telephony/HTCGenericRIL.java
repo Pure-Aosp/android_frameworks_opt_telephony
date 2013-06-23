@@ -64,10 +64,8 @@ public class HTCGenericRIL extends RIL implements CommandsInterface {
 
         switch(response) {
             case RIL_UNSOL_UNKNOWN_1:
-                if (RILJ_LOGD) unsljLogRetUnknown(response, ret);
                 break;
             case RIL_UNSOL_STK_PROACTIVE_COMMAND:
-                if (RILJ_LOGD) unsljLogRet(response, ret);
 
                 if (mCatProCmdRegistrant != null) {
                     mCatProCmdRegistrant.notifyRegistrant(
@@ -91,9 +89,5 @@ public class HTCGenericRIL extends RIL implements CommandsInterface {
                                 new AsyncResult (null, mCatProCmdBuffer, null));
             mCatProCmdBuffer = null;
         }        
-    }
-
-    protected void unsljLogRetUnknown(int response, Object ret) {
-        riljLog("[UNSL]< UNKNOWN " + response + " " + retToString(response, ret));
     }
 }

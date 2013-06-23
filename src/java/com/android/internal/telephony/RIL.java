@@ -214,7 +214,7 @@ class RILRequest {
  *
  * {@hide}
  */
-public final class RIL extends BaseCommands implements CommandsInterface {
+public class RIL extends BaseCommands implements CommandsInterface {
     static final String RILJ_LOG_TAG = "RILJ";
     static final boolean RILJ_LOGD = true;
     static final boolean RILJ_LOGV = false; // STOPSHIP if true
@@ -2566,7 +2566,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return s;
     }
 
-    private void
+    protected void
     processUnsolicited (Parcel p) {
         int response;
         Object ret;
@@ -3076,7 +3076,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return sms;
     }
 
-    private Object
+    protected Object
     responseString(Parcel p) {
         String response;
 
