@@ -2731,7 +2731,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 if (RILJ_LOGD) unsljLogRet(response, ret);
 
                 boolean oldRil = needsOldRilFeature("skipbrokendatacall");
-                if (oldRil && "IP".equals(((ArrayList<DataCallState>)ret).get(0).type))
+                if (oldRil && "IP".equals(((ArrayList<DataCallResponse>)ret).get(0).type))
                     break;
 
                 mDataNetworkStateRegistrants.notifyRegistrants(new AsyncResult(null, ret, null));
